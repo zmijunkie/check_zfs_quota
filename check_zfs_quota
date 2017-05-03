@@ -1,0 +1,68 @@
+#!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
+
+import sys # exitcodes:  0=okay 1=warning 2=fail
+import subprocess
+
+command="/usr/local/bin/list_jail_quota.sh"
+warnlevel=0.1 # 10 per cent
+
+# http://www.fischerclan.de/byte_umrechner.html
+
+def get_bytes(size_input):
+    last_char=size_input[-1].lower()
+    size=None
+    if last_char=='k':
+        size=float(size_input[:-1])
+        size=float(size)*1024 # kilobyte
+    elif last_char=='m':
+        size=float(size_input[:-1])
+        size=float(size)*1048576 # megabyte
+    elif last_char=='g':
+        size=float(size_input[:-1])
+        size=float(size)*1073741824 # gigabyte
+    elif last_char=='t':
+        size=float(size_input[:-1])
+        size=float(size)*1073741824 # terabyte
+    else:
+        import pdb; pdb.set_trace() # unknown scale
+        # size=float(size_input)
+
+    return size
+
+def check_line(line):
+    name,used,avail,quota=line.split('\t')
+    used_bytes,avail_bytes,quota_bytes=get_bytes(used),get_bytes(avail),get_bytes(quota)
+    if avail_bytes<quota_bytes*warnlevel:
+       print "%s OVERFLOW used=%s|avail=%s" % (name,used,avail)
+       return 2
+    # print "%s OK used=%s|avail=%s" % (name,used,avail)
+    return 0
+    
+
+def main():
+
+    output=subprocess.check_output([command])
+    
+    lines=[line for line in output.split('\n') if line !='' ]
+
+    something_is_wrong=False
+    for line in lines:
+        some_status=check_line(line)
+        something_is_wrong=some_status if some_status else something_is_wrong
+
+    if something_is_wrong:
+       sys.exit(2)
+    
+    print "OK - all quota usage below warning level"
+    sys.exit(0)
+
+    # import pdb; pdb.set_trace()
+    
+
+# check me with 
+#
+#  ./usr/local/bin/list_jail_quota.sh ; echo $?
+#
+if __name__ == "__main__":
+    main()
