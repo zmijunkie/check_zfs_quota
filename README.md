@@ -6,6 +6,7 @@ to your liking and local situation - my output of list_jail_quota.sh look
 like this:
 
 /usr/local/bin/list_jail_quota.sh
+
 rpool/jails/somehost1.opensource-consult.com	4.43G	5.57G	10G
 rpool/jails/somehost2.opensource-consult.com	2.70G	7.30G	10G
 rpool/jails/somehost3.opensource-consult.com	2.98G	7.02G	10G
