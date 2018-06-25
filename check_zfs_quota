@@ -24,10 +24,11 @@ def get_bytes(size_input):
     elif last_char=='t':
         size=float(size_input[:-1])
         size=float(size)*1073741824 # terabyte
+    elif size_input=='0':
+        size=float(0)
     else:
         import pdb; pdb.set_trace() # unknown scale
         # size=float(size_input)
-
     return size
 
 def check_line(line):
