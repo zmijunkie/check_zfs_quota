@@ -33,7 +33,7 @@ def get_bytes(size_input):
 
 def check_line(line):
     name,used,avail,quota=line.split('\t')
-    if quota=='none':
+    if quota in ['none','-']:
         print "%s NO QUOTA DEFINED used=%s|avail=%s" % (name,used,avail)
         return 2
     used_bytes,avail_bytes,quota_bytes=get_bytes(used),get_bytes(avail),get_bytes(quota)
