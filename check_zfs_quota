@@ -32,7 +32,9 @@ def get_bytes(size_input):
     return size
 
 def check_line(line):
-    name,used,avail,quota=line.split('\t')
+    name,used,avail,quota,mountpoint=line.split('\t')
+    if mountpoint=='-':
+        return 0
     if quota in ['none','-']:
         print "%s NO QUOTA DEFINED used=%s|avail=%s" % (name,used,avail)
         return 2
