@@ -7,7 +7,7 @@ case $INPUT_STRING in
         zfs list -H -o name,used,avail,quota,mountpoint | grep jail | grep -v ezjail | grep 'rpool/jails/'
         ;;
     Linux)
-        zfs list -H -o name,used,avail,quota,mountpoint | tail -n +2 |  sed 's/,/./g'
+        zfs list -H -o name,used,avail,quota,mountpoint | tail -n +2 |  sed 's/,/./g' | grep -v -e '-$'
         break
         ;;
     *)
